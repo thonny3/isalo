@@ -7,6 +7,7 @@ import { Conge } from "../service/Conge";
 import { Fournisseur } from "../service/Fournisseur";
 import { Produit } from "../service/Produit";
 import ClipLoader from "react-spinners/ClipLoader"; // Import spinner component
+import { useNavigate } from "react-router-dom";
 const AdminContext = createContext();
 export const AdminProvider = ({ children }) => {
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -90,6 +91,9 @@ export const AdminProvider = ({ children }) => {
         console.log(error);
       });
   };
+  const navigate = useNavigate()
+
+ 
   useEffect(() => {
     getPostes();
     getAllEmploye();

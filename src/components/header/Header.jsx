@@ -8,17 +8,16 @@ import { ChevronDown, Cog, Lock, LogOut, User } from 'lucide-react';
 
 export default function Header() {
   const { app } = useAdmin();
-  const { user } = useAuth();
+  const { user ,logout} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLogout = () => {
-    // Logique pour la déconnexion ici
-    console.log("Déconnexion");
-  };
+
+
+ 
 
   return (
     <div className="header flex justify-between shadow-sm items-center px-8 py-2">
@@ -35,7 +34,7 @@ export default function Header() {
                 <User className="w-5 h-5" />
                 <span>Profil</span>
               </button>
-              
+
               <button className="w-full text-left px-4 py-2 flex items-center space-x-2 hover:bg-gray-100">
                 <Cog className="w-5 h-5" />
                 <span>Paramètres</span>
@@ -43,7 +42,7 @@ export default function Header() {
               
               <button 
                 className="w-full text-left px-4 py-2 flex items-center space-x-2 hover:bg-gray-100"
-                onClick={handleLogout}
+                onClick={logout}
               >
                 <LogOut className="w-5 h-5" />
                 <span>Déconnexion</span>
