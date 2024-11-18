@@ -10,7 +10,13 @@ import {
   ChevronRight,
   ChevronDownIcon,
   ChevronUpIcon,
-  BoxIcon,
+  Box,
+  Briefcase,
+  List,
+  Calendar,
+  BedSingle,
+  CalendarCheck,
+  PackageCheck,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
@@ -77,10 +83,10 @@ const Sidebar = () => {
   };
 
   const changeApp = (data) => {
-    if (data == "toils") {
+    if (data === "toils") {
       setApp("toils");
       setOpen(true);
-    } else if (data == "ramirandava") {
+    } else if (data === "ramirandava") {
       setApp("ramirandava");
       setOpen(true);
     }
@@ -95,7 +101,7 @@ const Sidebar = () => {
         </div>
         <div>
           <h2 className="font-semibold text-primary duration-200">
-            {app == "toils" ? "Toils d'Isalo " : "Ramirandava "}
+            {app === "toils" ? "Toils d'Isalo " : "Ramirandava "}
           </h2>
           <span onClick={() => setOpen(!open)}>
             {open ? (
@@ -112,9 +118,9 @@ const Sidebar = () => {
           open ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
       >
-        {app == "toils" ? (
+        {app === "toils" ? (
           <button
-            className="mt-5 w-full flex items-center px-2  py-2 rounded-md hover:bg-primary hover:text-white"
+            className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
             onClick={() => changeApp("ramirandava")}
           >
             <Building2 size={20} className="mr-2" />
@@ -122,7 +128,7 @@ const Sidebar = () => {
           </button>
         ) : (
           <button
-            className="mt-5 w-full flex items-center px-2  py-2 rounded-md hover:bg-primary hover:text-white"
+            className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
             onClick={() => changeApp("toils")}
           >
             <Building2 size={20} className="mr-2" />
@@ -151,6 +157,7 @@ const Sidebar = () => {
         {openMenus.employes && (
           <div className="pl-6">
             <SidebarItem
+              icon={Briefcase}
               to="poste"
               label="Postes"
               indent={true}
@@ -158,6 +165,7 @@ const Sidebar = () => {
               onClick={() => handleItemClick("postes")}
             />
             <SidebarItem
+              icon={List}
               to="list"
               label="Listes"
               indent={true}
@@ -165,6 +173,7 @@ const Sidebar = () => {
               onClick={() => handleItemClick("listes")}
             />
             <SidebarItem
+              icon={Calendar}
               to="conge"
               label="Congé"
               indent={true}
@@ -174,92 +183,62 @@ const Sidebar = () => {
           </div>
         )}
 
-     
-          <SidebarItem
-           to="produit"
-          icon={BoxIcon}
+        <SidebarItem
+          icon={Box}
+          to="produit"
           label="Produits"
           isActive={activeItem === "produits"}
           onClick={() => handleItemClick("produits")}
         />
 
         <SidebarItem
-          to={"fournisseur"}
           icon={Truck}
+          to="fournisseur"
           label="Fournisseurs"
           isActive={activeItem === "fournisseurs"}
           onClick={() => handleItemClick("fournisseurs")}
         />
-        {app == "toils" ? (
+        {app === "toils" ? (
           <>
             <SidebarItem
-              icon={Building2}
-              label="Toils de l'Isalo"
-              hasChildren={true}
-              isOpen={openMenus.toils}
-              onClick={() => toggleMenu("toils")}
+              icon={PackageCheck}
+              to="stock-toil"
+              label="Stocks"
+              isActive={activeItem === "stock-toil"}
+              onClick={() => handleItemClick("stock-toil")}
+            />
+            <SidebarItem
+              icon={PackageCheck}
+              to="approvisement-isalo"
+              label="Approvisionnement"
+              isActive={activeItem === "Approvisionnement-isalo"}
+              onClick={() => handleItemClick("Approvisionnement-isalo")}
+            />
+            <SidebarItem
+              icon={BedSingle}
+              to="chambres"
+              label="Chambres"
+              isActive={activeItem === "chambres"}
+              onClick={() => handleItemClick("chambres")}
+            />
+            <SidebarItem
+              icon={CalendarCheck}
+              to="reservation"
+              label="Réservations"
+              isActive={activeItem === "reservations"}
+              onClick={() => handleItemClick("reservations")}
             />
           </>
         ) : (
           <>
             <SidebarItem
-              icon={Building2}
-              label="Ramirandava"
-              hasChildren={true}
-              isOpen={openMenus.ramirandava}
-              onClick={() => toggleMenu("ramirandava")}
-            />
-          </>
-        )}
-        {/* Ramirandava   Section */}
-        {openMenus.ramirandava && (
-          <div className="pl-6">
-          
-            <SidebarItem
+              icon={PackageCheck}
               to="approvisement"
               label="Approvisionnement"
-              indent={true}
               isActive={activeItem === "approvisionnement"}
               onClick={() => handleItemClick("approvisionnement")}
             />
-          
-          </div>
-        )}
-
-        {/* Toils de l'Isalo Section */}
-        {openMenus.toils && (
-          <div className="pl-6">
-            <SidebarItem
-              to="stock-toil"
-              label="Stocks"
-              indent={true}
-              isActive={activeItem === "stock-toil"}
-              onClick={() => handleItemClick("stock-toil")}
-            />
-            <SidebarItem
-              to="approvisement-isalo"
-              label="Approvisionnement"
-              indent={true}
-              isActive={activeItem === "Approvisionnement-isalo"}
-              onClick={() => handleItemClick("Approvisionnement-isalo")}
-            />
-        
-            <SidebarItem
-              to={"chambres"}
-              label="Chambres"
-              indent={true}
-              isActive={activeItem === "chambres"}
-              onClick={() => handleItemClick("chambres")}
-            />
-            <SidebarItem
-              to={"reservation"}
-              label="Réservations"
-              indent={true}
-              isActive={activeItem === "reservations"}
-              onClick={() => handleItemClick("reservations")}
-            />
-        
-          </div>
+          </>
         )}
 
         {/* Settings */}
