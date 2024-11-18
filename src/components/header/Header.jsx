@@ -5,19 +5,26 @@ import logo from '../../assets/logo.png';
 import { useAuth } from '../../context/AuthContext';
 import { useAdmin } from '../../context/AdminContext';
 import { ChevronDown, Cog, Lock, LogOut, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const { app } = useAdmin();
-  const { user ,logout} = useAuth();
+  const { user,setUser} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate  =  useNavigate()
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
 
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    setUser(null)
+    navigate('/')
 
- 
+  };
 
   return (
     <div className="header flex justify-between shadow-sm items-center px-8 py-2">
@@ -42,7 +49,7 @@ export default function Header() {
               
               <button 
                 className="w-full text-left px-4 py-2 flex items-center space-x-2 hover:bg-gray-100"
-                onClick={logout}
+                onClick={handleLogout}
               >
                 <LogOut className="w-5 h-5" />
                 <span>Déconnexion</span>

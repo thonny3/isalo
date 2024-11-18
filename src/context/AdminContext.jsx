@@ -91,7 +91,7 @@ export const AdminProvider = ({ children }) => {
         console.log(error);
       });
   };
-  const navigate = useNavigate()
+ 
 
  
   useEffect(() => {
