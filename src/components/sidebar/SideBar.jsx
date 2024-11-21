@@ -94,185 +94,186 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white shadow-lg relative">
-      {/* Profile Section */}
-      <div className="p-4 flex items-center space-x-3 border-b shadow-sm relative">
-        <div className="w-32 ml-8 rounded-md  overflow-hidden ">
-          <img src={Ramirandava} alt="Profile" className="w-full h-full " />
-        </div>
-        <div>
-          
-          <span onClick={() => setOpen(!open)}>
-            {open ? (
-              <ChevronDownIcon className="absolute right-1 text-gray-700" />
-            ) : (
-              <ChevronUpIcon className="absolute right-1 text-gray-700" />
-            )}
-          </span>
-        </div>
-      </div>
-      {/* popup */}
-      <div
-        className={`w-full rounded-md shadow-lg absolute h-28 bg-gray-100 px-2 py-2 top-20 duration-200 ${
-          open ? "opacity-0 pointer-events-none" : "opacity-100"
-        }`}
-      >
-        {app === "toils" ? (
-          <button
-            className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
-            onClick={() => changeApp("ramirandava")}
-          >
-            <Building2 size={20} className="mr-2" />
-            <span> Ramirandava</span>
-          </button>
-        ) : (
-          <button
-            className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
-            onClick={() => changeApp("toils")}
-          >
-            <Building2 size={20} className="mr-2" />
-            <span> Toils d'Isalo</span>
-          </button>
-        )}
-      </div>
-
-      {/* Navigation */}
-      <nav className="mt-4 px-3 pb-5  overflow-y-auto h-[450px]">
-        <SidebarItem
-          icon={Home}
-          label="Dashboard"
-          to="home"
-          isActive={activeItem === "dashboard"}
-          onClick={() => handleItemClick("dashboard")}
-        />
-        {/* Emplois Section */}
-        <SidebarItem
-          icon={Users}
-          label="Employees"
-          hasChildren={true}
-          isOpen={openMenus.employes}
-          onClick={() => toggleMenu("employes")}
-        />
-        {openMenus.employes && (
-          <div className="pl-6">
-            <SidebarItem
-              icon={Briefcase}
-              to="poste"
-              label="Postes"
-              indent={true}
-              isActive={activeItem === "postes"}
-              onClick={() => handleItemClick("postes")}
-            />
-            <SidebarItem
-              icon={List}
-              to="list"
-              label="Listes"
-              indent={true}
-              isActive={activeItem === "listes"}
-              onClick={() => handleItemClick("listes")}
-            />
-            <SidebarItem
-              icon={Calendar}
-              to="conge"
-              label="Congé"
-              indent={true}
-              isActive={activeItem === "conge"}
-              onClick={() => handleItemClick("conge")}
-            />
-          </div>
-        )}
-
-        <SidebarItem
-          icon={Box}
-          to="produit"
-          label="Produits"
-          isActive={activeItem === "produits"}
-          onClick={() => handleItemClick("produits")}
-        />
-
-        <SidebarItem
-          icon={Truck}
-          to="fournisseur"
-          label="Fournisseurs"
-          isActive={activeItem === "fournisseurs"}
-          onClick={() => handleItemClick("fournisseurs")}
-        />
-        {app === "toils" ? (
-          <>
-            <SidebarItem
-              icon={PackageCheck}
-              to="stock-toil"
-              label="Stocks"
-              isActive={activeItem === "stock-toil"}
-              onClick={() => handleItemClick("stock-toil")}
-            />
-            <SidebarItem
-              icon={PackageCheck}
-              to="approvisement-isalo"
-              label="Approvisionnement"
-              isActive={activeItem === "Approvisionnement-isalo"}
-              onClick={() => handleItemClick("Approvisionnement-isalo")}
-            />
-               <SidebarItem
-              icon={User2Icon}
-              to="clients"
-              label="Clients"
-              isActive={activeItem === "clients"}
-              onClick={() => handleItemClick("clients")}
-            />
-
-            <SidebarItem
-              icon={BedSingle}
-              to="chambres"
-              label="Chambres"
-              isActive={activeItem === "chambres"}
-              onClick={() => handleItemClick("chambres")}
-            />
-            <SidebarItem
-              icon={CalendarCheck}
-              to="reservation"
-              label="Réservations"
-              isActive={activeItem === "reservations"}
-              onClick={() => handleItemClick("reservations")}
-            />
-              <SidebarItem
-              icon={Bed}
-              to="sejour"
-              label="Séjour"
-              isActive={activeItem === "sejour"}
-              onClick={() => handleItemClick("sejour")}
-            />
-          </>
-        ) : (
-          <>
-           <SidebarItem
-              icon={PackageCheck}
-              to="stock-rami"
-              label="Stocks"
-              isActive={activeItem === "stock-rami"}
-              onClick={() => handleItemClick("stock-rami")}
-            />
-
-            <SidebarItem
-              icon={PackageCheck}
-              to="approvisement"
-              label="Approvisionnement"
-              isActive={activeItem === "approvisionnement"}
-              onClick={() => handleItemClick("approvisionnement")}
-            />
-          </>
-        )}
-
-        {/* Settings */}
-        <SidebarItem
-          icon={Settings}
-          label="Configurations"
-          isActive={activeItem === "configurations"}
-          onClick={() => handleItemClick("configurations")}
-          className="mt-auto"
-        />
-      </nav>
+<div className="flex flex-col h-full bg-white shadow-lg relative max-h-screen">
+  {/* Profile Section */}
+  <div className="p-4 flex items-center space-x-3 border-b shadow-sm relative">
+    <div className="w-32 ml-8 rounded-md overflow-hidden">
+      <img src={Ramirandava} alt="Profile" className="w-full h-full" />
     </div>
+    <div>
+      <span onClick={() => setOpen(!open)}>
+        {open ? (
+          <ChevronDownIcon className="absolute right-1 text-gray-700" />
+        ) : (
+          <ChevronUpIcon className="absolute right-1 text-gray-700" />
+        )}
+      </span>
+    </div>
+  </div>
+
+  {/* Popup */}
+  <div
+    className={`w-full rounded-md shadow-lg absolute h-28 bg-gray-100 px-2 py-2 top-20 duration-200 ${
+      open ? "opacity-0 pointer-events-none" : "opacity-100"
+    }`}
+  >
+    {app === "toils" ? (
+      <button
+        className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
+        onClick={() => changeApp("ramirandava")}
+      >
+        <Building2 size={20} className="mr-2" />
+        <span> Ramirandava</span>
+      </button>
+    ) : (
+      <button
+        className="mt-5 w-full flex items-center px-2 py-2 rounded-md hover:bg-primary hover:text-white"
+        onClick={() => changeApp("toils")}
+      >
+        <Building2 size={20} className="mr-2" />
+        <span> Toils d'Isalo</span>
+      </button>
+    )}
+  </div>
+
+  {/* Navigation */}
+  <nav className="mt-4 px-3 pb-5 overflow-y-auto h-auto md:h-[450px]">
+    <SidebarItem
+      icon={Home}
+      label="Dashboard"
+      to="home"
+      isActive={activeItem === "dashboard"}
+      onClick={() => handleItemClick("dashboard")}
+    />
+    {/* Emplois Section */}
+    <SidebarItem
+      icon={Users}
+      label="Employees"
+      hasChildren={true}
+      isOpen={openMenus.employes}
+      onClick={() => toggleMenu("employes")}
+    />
+    {openMenus.employes && (
+      <div className="pl-6">
+        <SidebarItem
+          icon={Briefcase}
+          to="poste"
+          label="Postes"
+          indent={true}
+          isActive={activeItem === "postes"}
+          onClick={() => handleItemClick("postes")}
+        />
+        <SidebarItem
+          icon={List}
+          to="list"
+          label="Listes"
+          indent={true}
+          isActive={activeItem === "listes"}
+          onClick={() => handleItemClick("listes")}
+        />
+        <SidebarItem
+          icon={Calendar}
+          to="conge"
+          label="Congé"
+          indent={true}
+          isActive={activeItem === "conge"}
+          onClick={() => handleItemClick("conge")}
+        />
+      </div>
+    )}
+
+    <SidebarItem
+      icon={Box}
+      to="produit"
+      label="Produits"
+      isActive={activeItem === "produits"}
+      onClick={() => handleItemClick("produits")}
+    />
+
+    <SidebarItem
+      icon={Truck}
+      to="fournisseur"
+      label="Fournisseurs"
+      isActive={activeItem === "fournisseurs"}
+      onClick={() => handleItemClick("fournisseurs")}
+    />
+    {app === "toils" ? (
+      <>
+        <SidebarItem
+          icon={PackageCheck}
+          to="stock-toil"
+          label="Stocks"
+          isActive={activeItem === "stock-toil"}
+          onClick={() => handleItemClick("stock-toil")}
+        />
+        <SidebarItem
+          icon={PackageCheck}
+          to="approvisement-isalo"
+          label="Approvisionnement"
+          isActive={activeItem === "Approvisionnement-isalo"}
+          onClick={() => handleItemClick("Approvisionnement-isalo")}
+        />
+        <SidebarItem
+          icon={User2Icon}
+          to="clients"
+          label="Clients"
+          isActive={activeItem === "clients"}
+          onClick={() => handleItemClick("clients")}
+        />
+
+        <SidebarItem
+          icon={BedSingle}
+          to="chambres"
+          label="Chambres"
+          isActive={activeItem === "chambres"}
+          onClick={() => handleItemClick("chambres")}
+        />
+        <SidebarItem
+          icon={CalendarCheck}
+          to="reservation"
+          label="Réservations"
+          isActive={activeItem === "reservations"}
+          onClick={() => handleItemClick("reservations")}
+        />
+        <SidebarItem
+          icon={Bed}
+          to="sejour"
+          label="Séjour"
+          isActive={activeItem === "sejour"}
+          onClick={() => handleItemClick("sejour")}
+        />
+      </>
+    ) : (
+      <>
+        <SidebarItem
+          icon={PackageCheck}
+          to="stock-rami"
+          label="Stocks"
+          isActive={activeItem === "stock-rami"}
+          onClick={() => handleItemClick("stock-rami")}
+        />
+
+        <SidebarItem
+          icon={PackageCheck}
+          to="approvisement"
+          label="Approvisionnement"
+          isActive={activeItem === "approvisionnement"}
+          onClick={() => handleItemClick("approvisionnement")}
+        />
+      </>
+    )}
+
+    {/* Settings */}
+    <SidebarItem
+      icon={Settings}
+      label="Configurations"
+      isActive={activeItem === "configurations"}
+      onClick={() => handleItemClick("configurations")}
+      className="mt-auto"
+    />
+  </nav>
+</div>
+
   );
 };
 

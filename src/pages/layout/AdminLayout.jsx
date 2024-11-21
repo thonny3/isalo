@@ -5,7 +5,7 @@ import Header from '../../components/header/Header'
 
 export default function AdminLayout() {
   return (
-    <div className="flex  min-h-screen">
+    <div className="flex  min-h-screen max-h-screen">
       {/* Sidebar */}
       <div className="sidebar w-[300px] ">
         <SideBar />

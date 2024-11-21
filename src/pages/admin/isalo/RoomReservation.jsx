@@ -1,57 +1,41 @@
 import React, { useState } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { CheckCircle, XCircle } from "lucide-react";
 import Modal from "../../../components/modal/Modal";
 
-const localizer = momentLocalizer(moment);
-
 const RoomReservation = () => {
-  
   const [events, setEvents] = useState([]);
-  const [clientColors, setClientColors] = useState({});
-  const [selectedRoom, setSelectedRoom] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     clientName: "",
     roomNumber: "",
     startDate: "",
     endDate: "",
-    paymentStatus: "",
+    paymentStatus: "none",
     advanceAmount: "",
   });
 
   const rooms = [101, 102, 103, 104, 105]; // Liste des chambres disponibles.
 
-  // Générer une couleur aléatoire pour chaque client
-  const generateRandomColor = () => {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-  };
-
-  // Vérifier si une chambre est occupée pour la période donnée
+  // Vérifier si une chambre est occupée
   const isRoomOccupied = (roomNumber, start, end) => {
     return events.some(
       (event) =>
         event.roomNumber === roomNumber &&
-        event.isPaid && // Seul l'événement payé bloque la chambre
-        ((start >= event.start && start < event.end) || // Chevauchement du début
-          (end > event.start && end <= event.end) || // Chevauchement de la fin
+        event.isPaid &&
+        ((start >= event.start && start < event.end) || // Chevauchement début
+          (end > event.start && end <= event.end) || // Chevauchement fin
           (start <= event.start && end >= event.end)) // Inclusion complète
     );
   };
 
   // Ajouter une réservation
   const handleAddReservation = () => {
-    const { clientName, roomNumber, startDate, endDate, paymentStatus } = formData;
+    const { clientName, roomNumber, startDate, endDate, paymentStatus } =
+      formData;
 
     if (!clientName || !roomNumber || !startDate || !endDate || !paymentStatus) {
       alert("Veuillez remplir tous les champs du formulaire.");
-      return;
-    }
-
-    if (!rooms.includes(parseInt(roomNumber))) {
-      alert("Numéro de chambre invalide !");
       return;
     }
 
@@ -65,13 +49,6 @@ const RoomReservation = () => {
 
     const isPaid = paymentStatus === "paid";
 
-    if (!clientColors[clientName]) {
-      setClientColors({
-        ...clientColors,
-        [clientName]: generateRandomColor(),
-      });
-    }
-
     setEvents([
       ...events,
       {
@@ -80,6 +57,9 @@ const RoomReservation = () => {
         clientName,
         roomNumber,
         isPaid,
+        paymentStatus,
+        advanceAmount: paymentStatus === "advance" ? formData.advanceAmount : 0,
+        totalAmount: 300, // Exemple d'un montant fixe
       },
     ]);
 
@@ -89,26 +69,9 @@ const RoomReservation = () => {
       roomNumber: "",
       startDate: "",
       endDate: "",
-      paymentStatus: "",
+      paymentStatus: "none",
       advanceAmount: "",
     });
-  };
-
-  // Gérer les styles des événements
-  const eventStyleGetter = (event) => {
-    const color = event.isPaid
-      ? "#4CAF50" // Vert pour payé
-      : event.paymentStatus === "advance"
-      ? "#FF9800" // Orange pour avance
-      : "#F44336"; // Rouge pour non payé
-
-    return {
-      style: {
-        backgroundColor: color,
-        color: "white",
-        borderBottom: `1px solid ${color}`,
-      },
-    };
   };
 
   // Gérer les changements dans le formulaire
@@ -119,166 +82,88 @@ const RoomReservation = () => {
     });
   };
 
-  // Filtrer les événements par chambre sélectionnée
-  const filteredEvents = selectedRoom
-    ? events.filter((event) => event.roomNumber === selectedRoom.toString())
-    : events;
+  const handlePaymentStatusChange = (status) => {
+    setFormData({
+      ...formData,
+      paymentStatus: status,
+      advanceAmount: status === "advance" ? formData.advanceAmount : "", // Réinitialiser le montant de l'avance si ce n'est pas "Avance"
+    });
+  };
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const roomsPerPage = 5;
-  
-    // Calculer les indices de début et de fin des chambres à afficher sur la page actuelle
-    const indexOfLastRoom = currentPage * roomsPerPage;
-    const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
-    const currentRooms = rooms.slice(indexOfFirstRoom, indexOfLastRoom);
-  
-    // Calculer le nombre total de pages
-    const totalPages = Math.ceil(rooms.length / roomsPerPage);
-  
-    // Fonction pour changer de page
-    const handlePageChange = (pageNumber) => {
-      setCurrentPage(pageNumber);
-    };
-    
   return (
     <>
       <div className="reservation-container">
         <header className="header flex justify-between items-center">
           <h1>Réservations de Chambres</h1>
           <button
-            className="add-reservation-button"
+            className="add-reservation-button bg-blue-500 text-white px-4 py-2 rounded"
             onClick={() => setModalOpen(true)}
           >
             Ajouter une réservation
           </button>
         </header>
 
-        {!modalOpen && (
-  <>
-    <div className="room-list">
-      
-      <div className="flex flex-wrap gap-4 mt-2">
-        <button
-          className={`px-6 py-2 rounded-lg ${
-            selectedRoom === null
-              ? "btn-primary text-white hover:bg-blue-700"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          } transition duration-300 ease-in-out`}
-          onClick={() => setSelectedRoom(null)}
-        >
-          Toutes les chambres
-        </button>
-        {rooms.map((room) => (
-          <button
-            key={room}
-            className={`px-6 py-2 rounded-lg border border-gray-300 ${
-              selectedRoom === room
-                ? "bg-primary text-white hover:bg-blue-700"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            } transition duration-300 ease-in-out`}
-            onClick={() => setSelectedRoom(room)}
-          >
-            {room}
-          </button>
-        ))}
-      </div>
-    </div>
+        <div className="reservation-list">
+          <h3>Liste des Réservations</h3>
+          <table className="text-left w-full border border-gray-200">
+            <thead>
+              <tr className="bg-gray-100 text-gray-700">
+                <th className="px-4 py-2 border">Nom client</th>
+                <th className="px-4 py-2 border">Numéro chambre</th>
+                <th className="px-4 py-2 border">Date de début</th>
+                <th className="px-4 py-2 border">Date de fin</th>
+                <th className="px-4 py-2 border">Statut</th>
+                <th className="px-4 py-2 border">Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map((event, index) => (
+                <tr key={index} className="text-gray-700 hover:bg-gray-200">
+                  <td className="px-4 py-2 border">{event.clientName}</td>
+                  <td className="px-4 py-2 border">{event.roomNumber}</td>
+                  <td className="px-4 py-2 border">
+                    {moment(event.start).format("DD/MM/YYYY")}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    {moment(event.end).format("DD/MM/YYYY")}
+                  </td>
+                  <td className="px-4 py-2 border">
+  <span
+    className={`text-xs font-medium me-2 px-2.5 py-0.5 rounded-full
+      ${event.isPaid
+        ? "bg-green-100 text-green-800" // Payé: vert
+        : event.paymentStatus === "advance"
+        ? "bg-yellow-100 text-yellow-800" // Avance: jaune
+        : "bg-red-100 text-red-800"}` // Non payé: rouge
+    }
+  >
+    {event.isPaid
+      ? "Payé"
+      : event.paymentStatus === "advance"
+      ? "Avance"
+      : "Non payé"}
+  </span>
+</td>
 
-    <div className="calendar mt-5">
-      <Calendar
-        localizer={localizer}
-        events={filteredEvents}
-        startAccessor="start"
-        endAccessor="end"
-        defaultView="month"
-        views={['month']}    // Active uniquement la vue "Month"
-        toolbar={false} 
-        selectable
-        eventPropGetter={eventStyleGetter}
-        style={{ height: "400px", opacity: 1 }}
-      />
-    </div>
-  </>
-)}
-
-
-
-<div className="reservation-list">
-  <h3>Liste des Réservations</h3>
-  <table className="text-left w-full">
-    <thead>
-      <tr className="bg-gray-100 text-gray-700">
-        <th className="px-4 py-2">Nom client</th>
-        <th className="px-4 py-2">Numéro chambre</th>
-        <th className="px-4 py-2">Date de début</th>
-        <th className="px-4 py-2">Date de fin</th>
-        <th className="px-4 py-2">Statut</th>
-        <th className="px-4 py-2">Montant</th>
-        <th className="px-4 py-2">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredEvents.map((event, index) => (
-        <tr key={index} className="text-gray-700 py-3 hover:bg-gray-200">
-          <td className="px-4 py-2">{event.clientName}</td>
-          <td className="px-4 py-2">{event.roomNumber}</td>
-          <td className="px-4 py-2">
-            {moment(event.start).format("DD/MM/YYYY")}
-          </td>
-          <td className="px-4 py-2">
-            {moment(event.end).format("DD/MM/YYYY")}
-          </td>
-          <td className="px-4 py-2">
-            {event.isPaid
-              ? "Payé"
-              : event.paymentStatus === "advance"
-              ? "Avance"
-              : "Non payé"}
-          </td>
-          <td className="px-4 py-2">
-            {event.paymentStatus === "advance"
-              ? `${event.advanceAmount} €`
-              : event.isPaid
-              ? `${event.totalAmount} €`
-              : "Non payé"}
-          </td>
-          <td className="px-4 py-2">
-            {event.isPaid ? (
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-                disabled
-              >
-                Payé
-              </button>
-            ) : event.paymentStatus === "advance" ? (
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={() => handleAction(event, "Accepter")}
-              >
-                Accepter
-              </button>
-            ) : (
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={() => handleAction(event, "Annuler")}
-              >
-                Annuler
-              </button>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+                  <td className="px-4 py-2 border">
+                    {event.paymentStatus === "advance"
+                      ? `${event.advanceAmount} €`
+                      : event.isPaid
+                      ? "300 €"
+                      : "Non payé"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <h1 className="text-2xl text-gray-700">Ajouter une Réservation</h1>
         <form className="mt-5">
           <div className="grid grid-cols-2 space-x-8">
-            <div className="form1">
+            <div>
               <div className="form-group mt-2">
                 <label htmlFor="clientName">Nom du Client</label>
                 <input
@@ -306,23 +191,40 @@ const RoomReservation = () => {
                   ))}
                 </select>
               </div>
-
               <div className="form-group mt-2">
-                <label htmlFor="paymentStatus">Statut de Paiement</label>
-                <select
-                  id="paymentStatus"
-                  className="form-control w-full"
-                  value={formData.paymentStatus}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Sélectionner le statut</option>
-                  <option value="paid">Payé</option>
-                  <option value="unpaid">Non Payé</option>
-                  <option value="advance">Avance</option>
-                </select>
+                <label>Statut de Paiement</label>
+                <div className="flex gap-4 mt-2">
+                  <label>
+                    <input
+                      type="radio"
+                      name="paymentStatus"
+                      checked={formData.paymentStatus === "paid"}
+                      onChange={() => handlePaymentStatusChange("paid")}
+                    />{" "}
+                    Payé
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="paymentStatus"
+                      checked={formData.paymentStatus === "advance"}
+                      onChange={() => handlePaymentStatusChange("advance")}
+                    />{" "}
+                    Avance
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="paymentStatus"
+                      checked={formData.paymentStatus === "none"}
+                      onChange={() => handlePaymentStatusChange("none")}
+                    />{" "}
+                    Non payé
+                  </label>
+                </div>
               </div>
             </div>
-            <div className="form2">
+            <div>
               <div className="form-group mt-2">
                 <label htmlFor="startDate">Date de Début</label>
                 <input
@@ -358,25 +260,18 @@ const RoomReservation = () => {
               )}
             </div>
           </div>
-
-          <div className="mt-5 flex justify-end">
+          <div className="mt-4 text-right">
             <button
               type="button"
-              className="bg-red-500 text-white px-6 py-2 rounded"
-              onClick={() => setModalOpen(false)}
-            >
-              Annuler
-            </button>
-            <button
-              type="button"
-              className="bg-primary text-white px-6 py-2 rounded ml-3"
+              className="btn-primary text-white px-6 py-2 rounded-md"
               onClick={handleAddReservation}
             >
-              Accepter
+              Ajouter la Réservation
             </button>
           </div>
         </form>
       </Modal>
+      
     </>
   );
 };
