@@ -4,7 +4,7 @@ import {
   MagnifyingGlassIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableEmploye from "../../components/table/TableEmploye";
 import Modal from "../../components/modal/Modal";
 import test from "../../assets/test.jpg";
@@ -215,6 +215,11 @@ export default function List() {
       })
       .catch((error) => console.log(error));
   };
+
+
+  useEffect(()=>{
+    getAllEmploye()
+  },[])
 
   return (
     <>

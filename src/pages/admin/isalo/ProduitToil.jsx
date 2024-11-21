@@ -1,21 +1,22 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { PlusCircle } from 'lucide-react'
 import React from 'react'
+import { useStock } from '../../../context/StockContext'
+import TableStockToils from '../../../components/table/TableStockToils'
 
 export default function ProduitToil() {
+  const {etatStock} = useStock()
   return (
     <>
         <div className="poste flex items-center justify-between">
     <div className="flex items-center ">
-          <span className="text-secondary text-gray-700 text-4xl ">
-            Toils d'Isalo
-          </span>
-          <div className="text-secondary text-gray-700 text-2xl ml-8">
-            <span>Listes des produits</span>
+       
+          <div className="text-secondary text-gray-700 text-2xl">
+            <span >Listes des produits </span>
           </div>
           <div className="nombre ml-2 w-5 h-5 bg-gray-200 rounded-full flex justify-center items-center mt-2">
             <span className="text-xs text-primary font-semibold">
-              {5}
+              {}
             </span>
           </div>
         </div>
@@ -30,6 +31,9 @@ export default function ProduitToil() {
             className="pl-2 outline-none flex-grow text-secondary text-md placeholder:text-secondary placeholder:text-sm placeholder:font-semibold"
           />
         </div>
+      </div>
+      <div className="mt-5">
+      <TableStockToils/>
       </div>
     </>
   )

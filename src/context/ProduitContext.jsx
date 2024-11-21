@@ -20,7 +20,7 @@ export const ProduitProvider = ({ children }) => {
     prix_vente:null
   });
   const [stock, setStock] = useState("vendu"); // État pour le lieu sélectionné
-
+  const [etatSTockToil,setetatSTockToil] =  useState([])
   const {toast} =  useAdmin()
 
   const [listProduit, setListProduit] = useState([]);
@@ -114,6 +114,9 @@ export const ProduitProvider = ({ children }) => {
       })
       .catch((error) => console.log(error));
   };
+
+
+
   useEffect(() => {
     getAllProduct();
   }, []);

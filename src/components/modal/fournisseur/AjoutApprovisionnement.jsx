@@ -14,7 +14,7 @@ export default function AjoutApprovisionnement() {
   const [prix, setPrix] = useState("");
   const [panier, setPanier] = useState([]);
   
-  const [stockage, setStockage] = useState("");
+  const [stockage, setStockage] = useState(null);
   const [idFourn, setIdfourni] = useState(null);
   const { listProduit } = useProduit();
 
@@ -76,26 +76,49 @@ export default function AjoutApprovisionnement() {
     }
 
     const totalAmount = panier.reduce((total, item) => total + item.quantite * item.prix, 0);
-
-    Approvisionement.createApprovisionement({
-      fournisseur_id: idFourn,
-      montant_approvisionnement: totalAmount,
-      stockage: lieu === "Ramirandava" ? stockage : null,
-      produits: panier,
-    })
-      .then(() => {
-        toast.success("Ajout avec succès !");
-        setProduitId("");
-        setQuantite("");
-        setPrix("");
-        setPanier([]);
-        setOpen(false);
-        getAllApprovisionement();
+    if (lieu=="Ramirandava") {
+      Approvisionement.createApprovisionementRami({
+        fournisseur_id: idFourn,
+        montant_approvisionnement: totalAmount,
+        stock_id: stockage,
+        produits: panier,
       })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Une erreur est survenue. Veuillez réessayer.");
-      });
+        .then(() => {
+          toast.success("Ajout avec succès !");
+          setProduitId("");
+          setQuantite("");
+          setPrix("");
+          setStockage("")
+          setPanier([]);
+          setOpen(false);
+          getAllApprovisionement();
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Une erreur est survenue. Veuillez réessayer.");
+        });
+
+    } else {
+      Approvisionement.createApprovisionement({
+        fournisseur_id: idFourn,
+        montant_approvisionnement: totalAmount,
+        stockage: lieu === "Ramirandava" ? stockage : null,
+        produits: panier,
+      })
+        .then(() => {
+          toast.success("Ajout avec succès !");
+          setProduitId("");
+          setQuantite("");
+          setPrix("");
+          setPanier([]);
+          setOpen(false);
+          getAllApprovisionement();
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Une erreur est survenue. Veuillez réessayer.");
+        });
+    }
   };
 
   const totalAmount = panier.reduce((total, item) => total + item.quantite * item.prix, 0);
@@ -107,11 +130,12 @@ export default function AjoutApprovisionnement() {
       </div>
 
       <div className="contenu mt-5">
+        <div className="flex items-center space-x-5">
         <div className="form-4">
           <label htmlFor="">Nom du Fournisseur</label>
           <br />
           <select
-            className="w-[450px] form-control"
+            className="w-[250px] form-control"
             onChange={(e) => setIdfourni(e.target.value)}
           >
             {listFournisseurs.map((row) => (
@@ -121,17 +145,31 @@ export default function AjoutApprovisionnement() {
             ))}
           </select>
         </div>
+        {lieu === "Ramirandava" && (
+              <div>
+                <label htmlFor="stockage">
+                  Stockage <span className="text-red-500">*</span> <br />
+                </label>
+               <select name="" id="" className="form-control w-[250px]"   onChange={(e) => setStockage(e.target.value)} >
+                <option value="">Selectionnez lieu  du  stockage </option>
+                <option value={1}>Stock Vitrine</option>
+                <option value={2}>Stock  Magasin </option>
+                <option value={3}>Stock  TIKO</option>
+               </select>
+              </div>
+            )}
+        </div>
 
         <form onSubmit={(e) => e.preventDefault()} className="flex justify-between items-center space-x-10">
-          <div className="form-group flex items-center space-x-5">
+          <div className="form-group flex items-center space-x-5 mt-5">
             <div className="form1">
               <label>
                 Nom du Produit <span className="text-red-500">*</span>
-              </label>
+              </label><br />
               <select
                 value={produitId}
                 onChange={handleProductChange}
-                className="form-control w-full"
+                className="form-control w-[250px]"
               >
                 <option value="">Sélectionnez un produit</option>
                 {listProduit.map((row) => (
@@ -145,31 +183,16 @@ export default function AjoutApprovisionnement() {
             <div className="form2">
               <label>
                 Quantité <span className="text-red-500">*</span>
-              </label>
+              </label><br />
               <input
                 type="number"
                 value={quantite}
                 onChange={(e) => setQuantite(Number(e.target.value))}
-                className="form-control w-full"
+                className="form-control w-[250px]"
                 placeholder="Entrer la quantité"
               />
             </div>
 
-            {lieu === "Ramirandava" && (
-              <div>
-                <label htmlFor="stockage">
-                  Stockage <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="stockage"
-                  value={stockage}
-                  onChange={(e) => setStockage(e.target.value)}
-                  className="form-control w-full mt-2"
-                  placeholder="Entrer le lieu de stockage"
-                />
-              </div>
-            )}
           </div>
 
           <button type="button" onClick={handleAddToCart} className="flex btn-primary items-center text-sm">

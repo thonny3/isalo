@@ -24,6 +24,10 @@ import Chambre from "../pages/admin/isalo/Chambre";
 import { ChambreProvider } from "../context/ChambreContext";
 import ProduitToil from "../pages/admin/isalo/ProduitToil";
 import Reservation from "../pages/admin/isalo/Reservation";
+import { StockProvider } from "../context/StockContext";
+import StockRami from "../pages/admin/Ramirandava/StockRami";
+import Sejour from "../pages/admin/isalo/Sejour";
+import Client from "../pages/admin/isalo/Client";
 
 export default function AdminRoute() {
   return (
@@ -33,8 +37,9 @@ export default function AdminRoute() {
         <Route path="/home" element={<HomeAdmin />} />
         <Route path="/role" element={<Role />} />
         <Route path="/list" element={<List />} />
-        <Route path='/stock-toil' element={<ProduitToil/>}/>
         <Route path='/reservation' element={<Reservation/>}/>
+        <Route path='/sejour' element={<Sejour/>}/>
+        <Route path='/clients' element={<Client/>}/>
         <Route
           path="/poste"
           element={
@@ -116,6 +121,8 @@ export default function AdminRoute() {
             </ProduitProvider>
           }
         />
+         <Route path='/stock-toil' element={<StockProvider><ProduitToil/></StockProvider>}/>
+         <Route path='/stock-rami' element={<StockProvider><StockRami/></StockProvider>}/>
       </Route>
     </Routes>
   );

@@ -15,6 +15,7 @@ import { PlusCircle } from 'lucide-react';
 export default function Produit() {
     const {setOpen,resertForm,listProduit} =  useProduit()
     const [stock, setStock] = useState("magasin"); // État pour le lieu sélectionné
+  
 
     const openModal =  ()=>{
         setOpen(true)

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, BellIcon, CogIcon, LockClosedIcon, Cog6ToothIcon } from '@heroicons/react/24/solid';
 import test from '../../assets/test.jpg';
-import logo from '../../assets/logo.png';
 import { useAuth } from '../../context/AuthContext';
 import { useAdmin } from '../../context/AdminContext';
 import { ChevronDown, Cog, Lock, LogOut, User } from 'lucide-react';

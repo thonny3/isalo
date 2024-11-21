@@ -113,6 +113,9 @@ const {toast,getPostes} = useAdmin()
     });
   };
 
+  useEffect(()=>{
+    getPostes()
+  },[])
   return (
     <PosteContext.Provider
       value={{

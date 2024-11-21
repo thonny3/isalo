@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   Home,
   Users,
-  FileText,
+  Bed ,
   Truck,
   Building2,
   Settings,
@@ -17,10 +17,11 @@ import {
   BedSingle,
   CalendarCheck,
   PackageCheck,
+  User2Icon,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.png";
 import { useAdmin } from "../../context/AdminContext";
+import Ramirandava from '../../assets/Ramirandava.png'
 
 const SidebarItem = ({
   icon: Icon,
@@ -38,7 +39,7 @@ const SidebarItem = ({
       className={`w-full flex items-center px-4 py-2 rounded-lg mt-1  ${
         isActive
           ? "bg-primary text-white"
-          : "text-gray-700 hover:bg-primary hover:text-white"
+          : "text-gray-700 hover:bg-gray-100"
       } ${indent ? "pl-8 text-sm" : "text-base"}`}
     >
       {Icon ? (
@@ -66,7 +67,7 @@ const Sidebar = () => {
     toils: false,
     ramirandava: false,
   });
-  const [activeItem, setActiveItem] = useState("chambres");
+  const [activeItem, setActiveItem] = useState("");
   const [open, setOpen] = useState(true);
   const { app, setApp } = useAdmin();
 
@@ -96,13 +97,11 @@ const Sidebar = () => {
     <div className="flex flex-col h-full bg-white shadow-lg relative">
       {/* Profile Section */}
       <div className="p-4 flex items-center space-x-3 border-b shadow-sm relative">
-        <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-300 ">
-          <img src={logo} alt="Profile" className="w-full h-full " />
+        <div className="w-32 ml-8 rounded-md  overflow-hidden ">
+          <img src={Ramirandava} alt="Profile" className="w-full h-full " />
         </div>
         <div>
-          <h2 className="font-semibold text-primary duration-200">
-            {app === "toils" ? "Toils d'Isalo " : "Ramirandava "}
-          </h2>
+          
           <span onClick={() => setOpen(!open)}>
             {open ? (
               <ChevronDownIcon className="absolute right-1 text-gray-700" />
@@ -214,6 +213,14 @@ const Sidebar = () => {
               isActive={activeItem === "Approvisionnement-isalo"}
               onClick={() => handleItemClick("Approvisionnement-isalo")}
             />
+               <SidebarItem
+              icon={User2Icon}
+              to="clients"
+              label="Clients"
+              isActive={activeItem === "clients"}
+              onClick={() => handleItemClick("clients")}
+            />
+
             <SidebarItem
               icon={BedSingle}
               to="chambres"
@@ -228,9 +235,24 @@ const Sidebar = () => {
               isActive={activeItem === "reservations"}
               onClick={() => handleItemClick("reservations")}
             />
+              <SidebarItem
+              icon={Bed}
+              to="sejour"
+              label="Séjour"
+              isActive={activeItem === "sejour"}
+              onClick={() => handleItemClick("sejour")}
+            />
           </>
         ) : (
           <>
+           <SidebarItem
+              icon={PackageCheck}
+              to="stock-rami"
+              label="Stocks"
+              isActive={activeItem === "stock-rami"}
+              onClick={() => handleItemClick("stock-rami")}
+            />
+
             <SidebarItem
               icon={PackageCheck}
               to="approvisement"

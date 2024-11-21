@@ -99,12 +99,13 @@ export const FournisseurProvider = ({ children }) => {
 
   const getAllApprovisionement =  ()=>{
     Approvisionement.getAllApprovisionement().then((res)=>{
-      console.log(res.data.approvisionnements);
+   
       setListappro(res.data.approvisionnements)
     }).catch(error=>console.log(error))
   }
 
   useEffect(()=>{
+    getAllFournisseur()
     getAllApprovisionement()
   },[])
 

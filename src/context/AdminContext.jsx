@@ -76,11 +76,13 @@ export const AdminProvider = ({ children }) => {
     Fournisseur.getAllFournisseur()
       .then((res) => {
         setListFournisseur(res.data);
+        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   // liste categorie
   const getAllCategorie = () => {
     Produit.getAllCategory()

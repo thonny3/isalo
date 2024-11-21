@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import isaloImage from "../../assets/isalo.png";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/Ramirandava.png";
 import ModalForgout from "../../components/modal/ModalForgout";
 import PassordForgot from "./PassordForgot";
 import { EyeIcon, EyeSlashIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
@@ -84,7 +84,7 @@ export default function Connexion() {
           {/* Background gradient with blur added */}
           <div className="card-form w-[380px] shadow-2xl bg-gradient-to-b from-white to-white/35 border border-white/80 rounded-lg px-5">
             <div className="logo flex justify-center items-center pt-8">
-              <img src={logo} alt="logo" />
+              <img src={logo} alt="logo" className="w-36" />
             </div>
             <div className="form py-2">
               <div className="text-center">
