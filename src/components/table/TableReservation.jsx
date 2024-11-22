@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAdmin } from "../../context/AdminContext";
 import { useReservation } from "../../context/ReservationContext";
 import Select from "react-select";
+import ConfirmModal from "../modal/reservation/ConfirmModal";
+import PaiedModal from "../modal/reservation/PaiedModal";
 
 export default function TableReservation() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -9,7 +11,7 @@ export default function TableReservation() {
   const itemsPerPage = 5;
 
   const { setOpenModalDelete, setInfo, listEmploye } = useAdmin();
-  const { listRes, rooms, setOpen } = useReservation();
+  const { listRes, rooms, setOpenD,setOpenP } = useReservation();
 
   // Filtrage des réservations par chambre
   const [filteredReservations, setFilteredReservations] = useState(listRes);
@@ -99,6 +101,15 @@ export default function TableReservation() {
     return pages;
   };
 
+  const  openModalConfirm = (row)=>{
+    setOpenD(true)
+  }
+
+  const  openModalConfirmPaie = (row)=>{
+    setOpenP(true)
+  }
+
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -152,11 +163,11 @@ export default function TableReservation() {
                 </td>
                 <td className="px-4 py-2 flex space-x-2">
                   {row.is_avance_paid === 1 ? (
-                    <button className="text-xs font-medium me-2 px-3 py-1 rounded-md bg-green-500 text-white w-20 hover:bg-green-800">
+                    <button onClick={()=>openModalConfirm(row)} className="text-xs font-medium me-2 px-3 py-1 rounded-md bg-green-500 text-white w-20 hover:bg-green-800">
                       Confirmer
                     </button>
                   ) : (
-                    <button className="text-xs font-medium me-2 px-3 py-1 rounded-md bg-blue-500 text-white w-20 hover:bg-blue-800">
+                    <button  onClick={()=>openModalConfirmPaie(row)} className="text-xs font-medium me-2 px-3 py-1 rounded-md bg-blue-500 text-white w-20 hover:bg-blue-800">
                       Payé
                     </button>
                   )}
@@ -190,6 +201,8 @@ export default function TableReservation() {
           </button>
         </div>
       </div>
+      <ConfirmModal/>
+      <PaiedModal/>
     </>
   );
 }
