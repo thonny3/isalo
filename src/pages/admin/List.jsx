@@ -176,6 +176,7 @@ export default function List() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("zsqwqs");
     if (validateForm()) {
       const formData = new FormData();
       formData.append("matricule", matricule);

@@ -8,6 +8,7 @@ import { Fournisseur } from "../service/Fournisseur";
 import { Produit } from "../service/Produit";
 import ClipLoader from "react-spinners/ClipLoader"; // Import spinner component
 import { useNavigate } from "react-router-dom";
+import { Client } from "../service/Client";
 const AdminContext = createContext();
 export const AdminProvider = ({ children }) => {
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -24,6 +25,7 @@ export const AdminProvider = ({ children }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true); // New loading state
   const [app,setApp] = useState("toils")
+  const [listCient,setClient] =  useState([])
 
   const closeModal = () => {
     setOpenModalDelete(false);
@@ -94,6 +96,19 @@ export const AdminProvider = ({ children }) => {
       });
   };
  
+    // liste client toils
+    const getAllClient = () => {
+      Client.getAllClient()
+        .then((res) => {
+          setClient(res.data);
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+   
+
 
  
   useEffect(() => {
@@ -102,6 +117,7 @@ export const AdminProvider = ({ children }) => {
     getTypeConge();
     getAllFournisseur();
     getAllCategorie();
+    getAllClient();
   }, []);
 
   return (
@@ -135,7 +151,9 @@ export const AdminProvider = ({ children }) => {
         app,
         setApp,
         setPoste,
-        setListFournisseur
+        setListFournisseur,
+        listCient,
+        getAllClient
       }}
     >
       {children}
