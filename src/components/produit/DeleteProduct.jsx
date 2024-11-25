@@ -1,40 +1,39 @@
-import React, { useState } from "react";
-import Modal from "../Modal";
-import { useAdmin } from "../../../context/AdminContext";
-import logoDelete from "../../../assets/delete.png";
-import { Poste } from "../../../service/Poste";
-import { usePoste } from "../../../context/PosteContext";
-
-export default function DeletePoste() {
-  const { openPosteDelete, closeModal, id, toast, setPoste, getPostes } =
-    useAdmin();
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const deletePoste = () => {
-    if (!id || !id.id) {
-      toast.error("Aucun ID valide n'est sélectionné. Veuillez réessayer.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    Poste.deletePoste(id.id)
-      .then(() => {
-        toast.success("Le poste a été supprimé !");
-        setPoste((prevList) => prevList.filter((item) => item.id !== id.id)); // Mise à jour locale
-        getPostes(); // Rechargement des données
-        closeModal();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la suppression :", error);
-        toast.error("Une erreur s'est produite lors de la suppression.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
+import React, { useState } from 'react'
+import { useAdmin } from '../../context/AdminContext';
+import { useConge } from '../../context/CongeContext';
+import Modal from '../modal/Modal';
+import  logoDelete from '../../assets/delete.png'
+import { useProduit } from '../../context/ProduitContext';
+import { Produit } from '../../service/Produit';
+export default function DeleteProduct() {
+    const { openPosteDelete, closeModal, id, toast } = useAdmin();
+    const {setListProduit} = useProduit()
+  
+    const [isLoading, setIsLoading] = useState(false); // State pour le chargement
+  
+    const deleteProducts = () => {
+      if (!id) {
+        toast.error("Aucun ID n'est sélectionné. Veuillez réessayer.");
+        return;
+      }
+  
+      setIsLoading(true); // Début du chargement
+  
+      Produit.deleteProduct(id)
+        .then(() => {
+          toast.success("Le produit  a été supprimé !");
+          setListProduit((prevList) => prevList.filter((item) => item.id !== id)); // Mettre à jour la liste localement
+          closeModal();
+      
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Une erreur s'est produite lors de la suppression.");
+        })
+        .finally(() => {
+          setIsLoading(false); // Fin du chargement
+        });
+    };
   return (
     <Modal open={openPosteDelete} onClose={closeModal}>
       <div className="modal-content mt-5">
@@ -43,9 +42,7 @@ export default function DeletePoste() {
         </div>
         <div className="w-56">
           <p className="text-center font-semibold text-lg text-gray-700">
-            {id && id.nom
-              ? `Êtes-vous sûr de vouloir supprimer ce poste ${id.nom} ?`
-              : "Aucun poste sélectionné."}
+            Êtes-vous sûr de vouloir supprimer ce [produit] ?
           </p>
         </div>
         <div className="boutton text-center mt-5">
@@ -57,7 +54,7 @@ export default function DeletePoste() {
             className={`text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 ml-2 inline-flex items-center ${
               isLoading ? "cursor-not-allowed" : ""
             }`}
-            onClick={deletePoste}
+            onClick={deleteProducts}
             disabled={isLoading}
           >
             {isLoading ? (
@@ -88,5 +85,5 @@ export default function DeletePoste() {
         </div>
       </div>
     </Modal>
-  );
+  )
 }

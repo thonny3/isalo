@@ -76,10 +76,7 @@ export const FournisseurProvider = ({ children }) => {
     if (data.contact == "") {
       formErrors.contact = "Le contact ne peut pas être vide.";
       isValid = false;
-    } else if (!/^\+261\s\d{2}\s\d{3}\s\d{2}$/.test(data.contact)) {
-      formErrors.contact = "Le numéro de contact doit commencer par +261 suivi de 9 chiffres.";
-      isValid = false;
-    }
+    } 
 
     setErrors(formErrors);
     return isValid;

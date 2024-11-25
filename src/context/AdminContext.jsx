@@ -20,8 +20,7 @@ export const AdminProvider = ({ children }) => {
   const [listEmploye, setListEmploye] = useState([]);
   const [typeConge, setTypeConge] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [listFournisseurs, setListFournisseur] = useState([]);
-  const [listCategorie, setListCategorie] = useState([]);
+  const [listFournisseurs, setListFournisseur] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true); // New loading state
   const [app,setApp] = useState("toils")
@@ -52,7 +51,7 @@ export const AdminProvider = ({ children }) => {
       });
   };
   //liste type de conge
-  const getTypeConge = () => {
+  const getTypeConges = () => {
     Conge.getTypeConge()
       .then((res) => {
         setTypeConge(res.data);
@@ -62,16 +61,7 @@ export const AdminProvider = ({ children }) => {
       });
   };
 
-  // Ensure search is case-insensitive
-  const filteredCourses = listEmploye.filter((data) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      data.nom.toLowerCase().includes(query) ||
-      data.email.toLowerCase().includes(query) ||
-      //data.prix.toString().includes(query) ||
-      new Date(data.date_naiss).toLocaleDateString("fr-FR").includes(query)
-    );
-  });
+
 
   // liste Fournisseur
   const getAllFournisseur = () => {
@@ -85,17 +75,7 @@ export const AdminProvider = ({ children }) => {
       });
   };
 
-  // liste categorie
-  const getAllCategorie = () => {
-    Produit.getAllCategory()
-      .then((res) => {
-        setListCategorie(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
- 
+
     // liste client toils
     const getAllClient = () => {
       Client.getAllClient()
@@ -110,15 +90,6 @@ export const AdminProvider = ({ children }) => {
    
 
 
- 
-  useEffect(() => {
-    getPostes();
-    getAllEmploye();
-    getTypeConge();
-    getAllFournisseur();
-    getAllCategorie();
-    getAllClient();
-  }, []);
 
   return (
     <AdminContext.Provider
@@ -144,7 +115,6 @@ export const AdminProvider = ({ children }) => {
         listFournisseurs,
         getAllFournisseur,
         poste,
-        listCategorie,
         isEditing,
         setIsEditing,
         loading,
@@ -153,7 +123,8 @@ export const AdminProvider = ({ children }) => {
         setPoste,
         setListFournisseur,
         listCient,
-        getAllClient
+        getAllClient,
+        getTypeConges
       }}
     >
       {children}

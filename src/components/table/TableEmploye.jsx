@@ -8,7 +8,12 @@ import {
 } from "@heroicons/react/24/solid";
 import { useAdmin } from "../../context/AdminContext";
 
-export default function TableEmploye(props) {
+export default function TableEmploye({
+  ShowEdit,
+  showModalDelete,
+  setEdit,
+  setOpen,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1); // Pour suivre le groupe de pages actuel
   const itemsPerPage = 5;
@@ -79,7 +84,7 @@ export default function TableEmploye(props) {
     <div className="overflow-x-auto">
       <table className="w-full text-left table-auto">
         <thead>
-        <tr className="bg-gray-100  text-gray-700 ">
+          <tr className="bg-gray-100  text-gray-700 ">
             <th className="px-4 py-2">Nom</th>
             <th className="px-4 py-2">Email</th>
             <th className="px-4 py-2">Contact</th>
@@ -118,7 +123,11 @@ export default function TableEmploye(props) {
                 </button>
                 <button
                   className="text-gray-600 hover:text-blue-700 text-sm"
-                  onClick={() => console.log(row)}
+                  onClick={() => {
+                    ShowEdit(row);
+                    setEdit(row.id);
+                    setOpen(true)
+                  }}
                   aria-label="Modifier"
                 >
                   <PencilSquareIcon className="w-5 h-5" />
@@ -126,7 +135,7 @@ export default function TableEmploye(props) {
                 <button
                   className="text-gray-600 hover:text-red-700 text-sm"
                   onClick={() => {
-                    props.showModalDelete(true);
+                    showModalDelete(true);
                     setInfo(row);
                   }}
                   aria-label="Supprimer"
@@ -139,33 +148,42 @@ export default function TableEmploye(props) {
         </tbody>
       </table>
 
-      <div className="flex justify-end items-center mt-4 text-sm">
+      {/* Pagination */}
+      <div className="flex justify-end items-center mt-4">
         <button
-          onClick={() => goToPreviousGroup()}
-          disabled={pageGroup === 1}
-          className={`px-4 py-2 text-sm flex items-center rounded-md transition-colors duration-300 ${
-            pageGroup === 1
-              ? "bg-gray-200 cursor-not-allowed"
-              : "bg-gray-200 hover:bg-gray-300"
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 mx-2 ${
+            currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
           }`}
         >
-          <ArrowLeftIcon className="w-5 h-5" />
-          <span className="ml-1">Précédent</span>
+          Previous
         </button>
-
-        <div className="flex space-x-2 text-sm">{renderPageNumbers()}</div>
-
+        <div className="flex space-x-2">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => goToPage(index + 1)}
+              className={`px-4 py-2 ${
+                currentPage === index + 1
+                  ? "bg-primary mx-2 text-white"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
         <button
-          onClick={() => goToNextGroup()}
-          disabled={pageGroup >= Math.ceil(totalPages / pagesPerGroup)}
-          className={`px-4 py-2 text-sm flex items-center rounded-md transition-colors duration-300 ${
-            pageGroup >= Math.ceil(totalPages / pagesPerGroup)
-              ? "bg-gray-200 cursor-not-allowed"
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2  mx-2 ${
+            currentPage === totalPages
+              ? "bg-gray-300"
               : "bg-gray-200 hover:bg-gray-300"
           }`}
         >
-          <span>Suivant</span>
-          <ArrowRightIcon className="w-5 h-5 ml-1" />
+          Next
         </button>
       </div>
     </div>

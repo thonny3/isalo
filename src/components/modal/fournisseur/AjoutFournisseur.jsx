@@ -32,7 +32,7 @@ export default function () {
                <div className="form1">
                <div className="form-group">
                     <label htmlFor="">Contact <span className='text-red-600 ml-2'>*</span></label>
-                    <input type="text" value={data.contact} className={`form-control w-full ${ errors.contact && "border-red-600"}`}placeholder='Entrer le contact' onChange={getContact}/>
+                    <input type="text" value={data.contact} className={`form-control w-full ${ errors.contact && "border-red-600"}`}placeholder='+261 ' onChange={getContact}/>
                         {/* Message d'erreur pour l'adresse */}
                         {errors.contact && (
                     <p className="text-red-600 mt-1 text-sm">{errors.contact}</p>
@@ -43,7 +43,7 @@ export default function () {
             </div>
             <div className="border-t border-gray-200 my-5"></div>
             <div className="button text-right ">
-                <button className='btn' type='button'>Annuler</button>
+                <button className='btn' type='button' onClick={onclose}>Annuler</button>
                 <button className='btn-primary ml-2' type='submit'>{ edit? "Modifier" : "Ajouter"}</button>
             </div>
          </form>

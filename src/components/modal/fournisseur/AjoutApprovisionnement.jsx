@@ -48,6 +48,7 @@ export default function AjoutApprovisionnement() {
     if (produitDejaDansPanier) {
       toast.error("Le produit est déjà dans le panier !");
     } else {
+     if(listProduit!=null){
       const produitInfo = listProduit.find(
         (prod) => String(prod.id) === String(produitId)
       );
@@ -60,6 +61,7 @@ export default function AjoutApprovisionnement() {
         setQuantite("");
         setPrix("");
       }
+     }
     }
   }, [produitId, quantite, prix, panier, listProduit, toast]);
 
@@ -172,11 +174,11 @@ export default function AjoutApprovisionnement() {
                 className="form-control w-[250px]"
               >
                 <option value="">Sélectionnez un produit</option>
-                {listProduit.map((row) => (
+                {listProduit!=null ?(listProduit.map((row) => (
                   <option key={row.id} value={row.id}>
                     {row.nom}
                   </option>
-                ))}
+                ))) :null}
               </select>
             </div>
 

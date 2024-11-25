@@ -36,7 +36,7 @@ export const ReservationProvider = ({ children }) => {
 
   return (
     <ReservationContext.Provider
-      value={{ listRes, rooms,open , setOpen, getReservation, getAllChambres,setData,data,setOpenD,open,setOpenP,openP,openD  }}
+      value={{ listRes, rooms,open , setOpen, getReservation, getAllChambres,setData,data,setOpenD,setOpenP,openP,openD  }}
     >
       {children}
     </ReservationContext.Provider>

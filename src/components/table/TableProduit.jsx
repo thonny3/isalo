@@ -8,7 +8,7 @@ export default function TableProduit() {
   const [pageGroup, setPageGroup] = useState(1);
   const itemsPerPage = 5;
   const { setOpenModalDelete, setInfo, listEmploye } = useAdmin();
-  const { listProduit } = useProduit();
+  const { listProduit,setEdit,setOpen,ShowEdit } = useProduit();
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(listProduit.length / itemsPerPage);
@@ -106,7 +106,11 @@ export default function TableProduit() {
               <td className="px-4 py-2 flex space-x-2">
                 <button
                   className="text-gray-600 hover:text-blue-700 text-sm"
-                  onClick={() => console.log(row)}
+                  onClick={()=>{
+                    setOpen(true);
+                    setEdit(row.id);
+                    ShowEdit(row)
+                }}
                 >
                   <PencilSquareIcon className="w-5 h-5" />
                 </button>
@@ -124,26 +128,30 @@ export default function TableProduit() {
           ))}
         </tbody>
       </table>
-      {/* Pagination */}
-      <div className="flex justify-end items-center mt-4">
+       {/* Pagination */}
+       <div className="flex justify-end items-center mt-4">
         <button
-          onClick={goToPreviousGroup}
-          disabled={pageGroup === 1}
-          className={`px-4 py-2 ${
-            pageGroup === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
-          }`}
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 mx-2 ${currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
         >
           Previous
         </button>
-        <div className="flex space-x-2">{renderPageNumbers()}</div>
+        <div className="flex space-x-2">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => goToPage(index + 1)}
+              className={`px-4 py-2 ${currentPage === index + 1 ? "bg-primary mx-2 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
         <button
-          onClick={goToNextGroup}
-          disabled={pageGroup >= Math.ceil(totalPages / pagesPerGroup)}
-          className={`px-4 py-2 ${
-            pageGroup >= Math.ceil(totalPages / pagesPerGroup)
-              ? "bg-gray-300"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2  mx-2 ${currentPage === totalPages ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
         >
           Next
         </button>

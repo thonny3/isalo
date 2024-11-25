@@ -5,14 +5,13 @@ import {
 } from "@heroicons/react/24/solid";
 import { useAdmin } from "../../context/AdminContext";
 import { useFournisseur } from "../../context/FournisseurContext";
-import { data } from "autoprefixer";
 
 export default function TableFournisseur() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
   const itemsPerPage = 5;
-  const { listFournisseurs,setOpenPosteDelete,setId } = useAdmin();
-  const {setEdit,setOpen,ShowEdit} =  useFournisseur()
+  const { listFournisseurs, setOpenPosteDelete, setId } = useAdmin();
+  const { setEdit, setOpen, ShowEdit } = useFournisseur();
 
   // Calculer le nombre total de pages
   const totalPages = Math.ceil(listFournisseurs.length / itemsPerPage);
@@ -24,16 +23,23 @@ export default function TableFournisseur() {
     currentPage * itemsPerPage
   );
 
+  // Aller à la page sélectionnée
   const goToPage = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
+  // Passer au groupe de pages suivant
   const goToNextGroup = () => {
-    setPageGroup(pageGroup + 1);
+    if (pageGroup < Math.ceil(totalPages / pagesPerGroup)) {
+      setPageGroup(pageGroup + 1);
+    }
   };
 
+  // Passer au groupe de pages précédent
   const goToPreviousGroup = () => {
-    setPageGroup(pageGroup - 1);
+    if (pageGroup > 1) {
+      setPageGroup(pageGroup - 1);
+    }
   };
 
   // Fonction pour rendre les numéros de page avec ellipses
@@ -78,10 +84,10 @@ export default function TableFournisseur() {
 
   return (
     <div className="">
-      <table className="text-left w-full rounded-md  shadow-lg">
-        <thead className="">
-        <tr className="bg-gray-100  text-gray-700 ">
-            <th className="px-4 py-2 ">Nom</th>
+      <table className="text-left w-full ">
+        <thead>
+          <tr className="bg-gray-100 text-gray-700">
+            <th className="px-4 py-2">Nom</th>
             <th className="px-4 py-2">Contact</th>
             <th className="px-4 py-2">Adresse</th>
             <th className="px-4 py-2">Action</th>
@@ -89,23 +95,23 @@ export default function TableFournisseur() {
         </thead>
         <tbody>
           {currentData.map((row, index) => (
-            <tr key={index} className="border-b ">
+            <tr key={index} className="border-b">
               <td className="px-4 py-2 flex items-center">
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200">
                   <span>{row.nom.split(" ")[0].charAt(0)}</span>
                 </div>
-                <span className="ml-2  font-semibold text-gray-700">{row.nom}</span>
+                <span className="ml-2 font-semibold text-gray-700">{row.nom}</span>
               </td>
               <td className="px-4 py-2 text-gray-700">{row.contact}</td>
               <td className="px-4 py-2 text-gray-700">{row.adresse}</td>
               <td className="px-4 py-2 flex space-x-2">
                 <button
                   className="text-gray-600 hover:text-blue-700 text-sm"
-                  onClick={()=>{
+                  onClick={() => {
                     setOpen(true);
                     setEdit(row.id);
-                    ShowEdit(row)
-                }}
+                    ShowEdit(row);
+                  }}
                 >
                   <PencilSquareIcon className="w-6 h-6" />
                 </button>
@@ -114,7 +120,7 @@ export default function TableFournisseur() {
                   onClick={() => {
                     setOpenPosteDelete(true);
                     setId(row.id);
-                }}
+                  }}
                 >
                   <TrashIcon className="w-6 h-6" />
                 </button>
@@ -123,22 +129,31 @@ export default function TableFournisseur() {
           ))}
         </tbody>
       </table>
-      {/* Pagination */}
-      <div className="flex justify-end items-center mt-4">
+
+        {/* Pagination */}
+        <div className="flex justify-end items-center mt-4">
         <button
-          onClick={goToPreviousGroup}
-          disabled={pageGroup === 1}
-          className={`px-4 py-2 ${pageGroup === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 mx-2 ${currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
         >
           Previous
         </button>
         <div className="flex space-x-2">
-          {renderPageNumbers()}
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => goToPage(index + 1)}
+              className={`px-4 py-2 ${currentPage === index + 1 ? "bg-primary mx-2 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
         <button
-          onClick={goToNextGroup}
-          disabled={pageGroup >= Math.ceil(totalPages / pagesPerGroup)}
-          className={`px-4 py-2 ${pageGroup >= Math.ceil(totalPages / pagesPerGroup) ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2  mx-2 ${currentPage === totalPages ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
         >
           Next
         </button>

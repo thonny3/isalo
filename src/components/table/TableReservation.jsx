@@ -176,30 +176,34 @@ export default function TableReservation() {
             ))}
           </tbody>
         </table>
-        {/* Pagination */}
-        <div className="flex justify-end items-center mt-4">
-          <button
-            onClick={goToPreviousGroup}
-            disabled={pageGroup === 1}
-            className={`px-4 py-2 ${
-              pageGroup === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
-            }`}
-          >
-            Previous
-          </button>
-          <div className="flex space-x-2">{renderPageNumbers()}</div>
-          <button
-            onClick={goToNextGroup}
-            disabled={pageGroup >= Math.ceil(totalPages / pagesPerGroup)}
-            className={`px-4 py-2 ${
-              pageGroup >= Math.ceil(totalPages / pagesPerGroup)
-                ? "bg-gray-300"
-                : "bg-gray-200 hover:bg-gray-300"
-            }`}
-          >
-            Next
-          </button>
+         {/* Pagination */}
+         <div className="flex justify-end items-center mt-4">
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 mx-2 ${currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
+        >
+          Previous
+        </button>
+        <div className="flex space-x-2">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => goToPage(index + 1)}
+              className={`px-4 py-2 ${currentPage === index + 1 ? "bg-primary mx-2 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2  mx-2 ${currentPage === totalPages ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"}`}
+        >
+          Next
+        </button>
+      </div>
       </div>
       <ConfirmModal/>
       <PaiedModal/>

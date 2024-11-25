@@ -29,7 +29,7 @@ function App() {
           }
         />
       </Routes>
-      <ToastContainer />
+      <ToastContainer  autoClose={500}/>
     </>
   );
 }

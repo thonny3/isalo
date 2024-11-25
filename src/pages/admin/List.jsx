@@ -35,6 +35,7 @@ export default function List() {
   const [image, setImage] = useState(null);
   const [files, setFiles] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [edit,setEdit] =  useState(null)
 
   const {
     poste,
@@ -49,6 +50,7 @@ export default function List() {
   const onClose = () => {
     setOpen(false);
     setOpenDelete(false);
+    setEdit(null)
   };
 
   const showModalDelete = (data) => {
@@ -218,6 +220,29 @@ export default function List() {
   };
 
 
+
+  const ShowEdit = (data) => {
+    setmatricule(data.matricule || "");
+    setNom(data.nom || "");
+    setPrenom(data.prenom || "");
+    setDate_naiss(data.date_naiss || "");
+    setNum_cin(data.num_cin || "");
+    setPoste_id(data.poste_id || null);
+    setEmail(data.email || "");
+    setContact(data.contact || "");
+    setSituation_mat(data.situation_mat || "celibataire");
+    setNombre_enf(data.nombre_enf || 0);
+    setDate_embauche(data.date_embauche || "");
+    setNumero_cnaps(data.numero_cnaps || "");
+    setNumero_omsi(data.numero_omsi || "");
+    setBanque(data.banque || "");
+    setNum_compte_bancaire(data.num_compte_bancaire || "");
+    setSalaires_brut(data.salaires_brut || null);
+    setImage(data.image || null);
+    setFiles(data.files || null);
+  };
+
+  
   useEffect(()=>{
     getAllEmploye()
   },[])
@@ -258,43 +283,16 @@ export default function List() {
         </div>
       </div>
       <div className=" mt-5">
-        <TableEmploye showModalDelete={showModalDelete} />
+        <TableEmploye showModalDelete={showModalDelete}  ShowEdit={ShowEdit}  setEdit={setEdit} setOpen={setOpen}/>
       </div>
       <Modal open={open} onClose={onClose}>
         <div className="titre mt-8 text-secondary font-semibold text-2xl text-center">
-          Création employé
+        {edit ? "Modifier" : "  Création "} employé
         </div>
         <form action="" onSubmit={handleSubmit}>
           <div className="card-form mt-5  ">
             <div className="form flex ">
-              <div className="photo border-separate ">
-                <div className="w-48 h-48 flex justify-center items-center border-2 border-gray-700 relative cursor-pointer border-dashed">
-                  <input
-                    type="file"
-                    id="coverImage"
-                    accept="image/*"
-                    hidden
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      setImage(file);
-                    }}
-                  />
-                  <label htmlFor="coverImage" className="cursor-pointer">
-                    <div className="flex justify-center items-center ">
-                      {image ? (
-                        <img
-                          src={URL.createObjectURL(image)}
-                          alt="Image de couverture"
-                          className="w-full h-full object-cover absolute"
-                        />
-                      ) : (
-                        <img src={upload} alt="" srcset="" />
-                      )}
-                    </div>
-                    {!image && <p>Insérez l'image</p>}
-                  </label>
-                </div>
-              </div>
+              
               <div className="formulaire flex ml-10">
                 <div className="form1">
                   <div className="form-group">
@@ -551,13 +549,23 @@ export default function List() {
                       onChange={(e) => setSalaires_brut(e.target.value)}
                     />
                   </div>
+                  <div className="form-group mt-2">
+                    <label htmlFor="">Sexe <span className="text-red-500">*</span></label><br />
+                    <select name="" id="" className="w-[80%] h-10 form-control">
+                      <option value="">Selectionner le sexe</option>
+                      <option value="F">Femme</option>
+                      <option value="M">Homme</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="boutton flex justify-end mt-5">
-              <button className="btn">Annuler</button>
+              <button className="btn" onClick={onClose}>Annuler</button>
               <button className="btn-primary px-5 ml-5" type="submit">
-                Ajouter
+                {
+                  edit ? "Modifier" : "Ajouter"
+                }
               </button>
             </div>
           </div>
@@ -575,7 +583,7 @@ export default function List() {
             </p>
           </div>
           <div className="boutton text-center mt-3">
-            <button className="btn">Annuler</button>
+            <button className="btn" onClick={onClose}>Annuler</button>
             <button
               className="btn-danger ml-3"
               onClick={() => deleteUser(info.id)}

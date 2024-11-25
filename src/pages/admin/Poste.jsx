@@ -9,16 +9,10 @@ import AjoutPoste from "../../components/modal/poste/AjoutPoste";
 import DeletePoste from "../../components/modal/poste/DeletePoste";
 import { usePoste } from "../../context/PosteContext";
 import { useAdmin } from "../../context/AdminContext";
+import LoadingPage from "../../components/LoadingPage";
 export default function Poste() {
   const {poste} = useAdmin()
     const {setOpen} =  usePoste()
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-      const timer = setTimeout(() => setLoading(false), 2000);
-      return () => clearTimeout(timer); // Clear timeout on unmount
-    }, []);
-
   return (
     <>
   <div className="flex items-center ">
@@ -51,9 +45,12 @@ export default function Poste() {
         </div>
       </div>
       <div className="table-poste">
-        <TablePoste/>
+        {
+          poste ?  <TablePoste/> : <LoadingPage/>
+        }
         <AjoutPoste  />
         <DeletePoste/>
+        
       </div>
     </>
   );

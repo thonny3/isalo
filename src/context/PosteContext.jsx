@@ -11,22 +11,16 @@ const {toast,getPostes} = useAdmin()
   const [edit, setEdit] = useState(null);
   const [data, setData] = useState({
     nom: "",
-    libelle: "",
     description: "",
   });
 
   const [errors, setErrors] = useState({
     nom: "",
-    libelle: "",
     description: "",
   });
 
   const getNom = (e) => {
     setData({ ...data, nom: e.target.value });
-  };
-
-  const getLibelle = (e) => {
-    setData({ ...data, libelle: e.target.value });
   };
 
   const getDescription = (e) => {
@@ -40,7 +34,6 @@ const {toast,getPostes} = useAdmin()
      if(edit){
         Poste.updatePoste(edit,{
             nom: data.nom,
-            libelle: data.libelle,
             description: data.description,
           })
             .then((res) => {
@@ -52,7 +45,6 @@ const {toast,getPostes} = useAdmin()
      }else{
         Poste.createPoste({
             nom: data.nom,
-            libelle: data.libelle,
             description: data.description,
           })
             .then((res) => {
@@ -67,7 +59,7 @@ const {toast,getPostes} = useAdmin()
   };
 
   const validateForm = () => {
-    let formErrors = { nom: "", libelle: "", description: "" };
+    let formErrors = { nom: ""};
     let isValid = true;
 
     // Vérifier   si  nom  vide
@@ -76,23 +68,12 @@ const {toast,getPostes} = useAdmin()
       isValid = false;
     }
 
-    // Vérifier   si  libelle  vide
-    if (data.libelle == "") {
-      formErrors.libelle = "Libelle est vide .";
-      isValid = false;
-    }
-    // Vérifier   si  description  vide
-    if (data.description == "") {
-      formErrors.description = "Le Déscription est vide .";
-      isValid = false;
-    }
     setErrors(formErrors);
     return isValid;
   };
 
   const ShowEdit = (data) => {
     setData({ ...data, nom: data.nom });
-    setData({ ...data, libelle: data.libelle });
     setData({ ...data, description: data.description });
   };
   const onclose = () => {
@@ -103,12 +84,10 @@ const {toast,getPostes} = useAdmin()
   const resetForm = () => {
     setData({
       nom: "",
-      libelle: "",
       description: "",
     });
     setErrors({
       nom: "",
-      libelle: "",
       description: "",
     });
   };
@@ -120,7 +99,6 @@ const {toast,getPostes} = useAdmin()
     <PosteContext.Provider
       value={{
         getDescription,
-        getLibelle,
         getNom,
         data,
         open,
