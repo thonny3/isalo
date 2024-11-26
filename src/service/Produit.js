@@ -13,6 +13,10 @@ let createProduct =  (data)=>{
 }
 
 let deleteProduct  = (id)=>{
-    return Axios.delete('produits'+id)
+    return Axios.delete('produits/'+id)
 }
-export const Produit = {getAllCategory,getAllProduct,createProduct,deleteProduct}
+
+let updateProduct =  (id,data)=>{
+    return Axios.put('produits/' + id,data)
+}
+export const Produit = {getAllCategory,getAllProduct,createProduct,deleteProduct,updateProduct}

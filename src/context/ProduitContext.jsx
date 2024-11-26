@@ -6,6 +6,7 @@ import { useAdmin } from "./AdminContext";
 const ProduitContext = createContext();
 export const ProduitProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [data, setData] = useState({
     nom: "",
     categorie_id: "",
@@ -45,23 +46,39 @@ export const ProduitProvider = ({ children }) => {
     e.preventDefault();
 
     if (validateForm()) {
-      Produit.createProduct({
-        nom: data.nom,
-        categorie_id: data.categorie_id,
-        prix: data.prix,
-        prix_vente: data.prix_vente,
-        quantite: 5,
-      })
-        .then((res) => {
-          onclose();
-          getAllProduct();
-          toast.success("Le produit a été ajouté avec succès !");
-          console.log("zaza");
+      if (edit) {
+        Produit.updateProduct(edit, {
+          nom: data.nom,
+          categorie_id: data.categorie_id,
+          prix: data.prix,
+          prix_vente: data.prix_vente,
+          quantite: 5,
         })
-        .catch((error) => console.log(error));
+          .then((res) => {
+            onclose();
+            getAllProduct();
+            toast.success("Le produit a été ajouté avec succès !");
+            console.log("zaza");
+          })
+          .catch((error) => console.log(error));
+      } else {
+        Produit.createProduct({
+          nom: data.nom,
+          categorie_id: data.categorie_id,
+          prix: data.prix,
+          prix_vente: data.prix_vente,
+          quantite: 5,
+        })
+          .then((res) => {
+            onclose();
+            getAllProduct();
+            toast.success("Le produit a été ajouté avec succès !");
+            console.log("zaza");
+          })
+          .catch((error) => console.log(error));
+      }
     }
   };
-
 
   const validateForm = () => {
     let formErrors = {
@@ -101,6 +118,7 @@ export const ProduitProvider = ({ children }) => {
   const onclose = () => {
     setOpen(false);
     resertForm();
+    setOpenDelete(false)
 
     setErrors({
       nom: "",
@@ -108,7 +126,6 @@ export const ProduitProvider = ({ children }) => {
       prix_vente: null,
       prix: null,
     });
-
   };
 
   const resertForm = () => {
@@ -120,7 +137,6 @@ export const ProduitProvider = ({ children }) => {
     });
   };
 
-  
   const getAllProduct = () => {
     Produit.getAllProduct()
       .then((res) => {
@@ -152,6 +168,7 @@ export const ProduitProvider = ({ children }) => {
     getAllProduct();
     getAllCategorie();
   }, []);
+
   return (
     <ProduitContext.Provider
       value={{
@@ -175,7 +192,9 @@ export const ProduitProvider = ({ children }) => {
         setEdit,
         edit,
         ShowEdit,
-        setListProduit
+        setListProduit,
+        openDelete,
+        setOpenDelete,
       }}
     >
       {children}

@@ -6,24 +6,24 @@ import  logoDelete from '../../assets/delete.png'
 import { useProduit } from '../../context/ProduitContext';
 import { Produit } from '../../service/Produit';
 export default function DeleteProduct() {
-    const { openPosteDelete, closeModal, id, toast } = useAdmin();
-    const {setListProduit} = useProduit()
+    const { openPosteDelete, id, toast } = useAdmin();
+    const {setListProduit,openDelete,onclose} = useProduit()
   
     const [isLoading, setIsLoading] = useState(false); // State pour le chargement
   
     const deleteProducts = () => {
-      if (!id) {
-        toast.error("Aucun ID n'est sélectionné. Veuillez réessayer.");
+      if (!id || !id.id) {
+        toast.error("Aucun ID valide n'est sélectionné. Veuillez réessayer.");
         return;
       }
   
       setIsLoading(true); // Début du chargement
   
-      Produit.deleteProduct(id)
+      Produit.deleteProduct(id.id)
         .then(() => {
           toast.success("Le produit  a été supprimé !");
-          setListProduit((prevList) => prevList.filter((item) => item.id !== id)); // Mettre à jour la liste localement
-          closeModal();
+          setListProduit((prevList) => prevList.filter((item) => item.id !== id.id)); // Mettre à jour la liste localement
+          onclose();
       
         })
         .catch((error) => {
@@ -35,18 +35,20 @@ export default function DeleteProduct() {
         });
     };
   return (
-    <Modal open={openPosteDelete} onClose={closeModal}>
+    <Modal open={openDelete} onClose={onclose}>
       <div className="modal-content mt-5">
         <div className="image flex justify-center">
           <img src={logoDelete} alt="Delete logo" />
         </div>
         <div className="w-56">
           <p className="text-center font-semibold text-lg text-gray-700">
-            Êtes-vous sûr de vouloir supprimer ce [produit] ?
+          {id && id.nom
+              ? `Êtes-vous sûr de vouloir supprimer ce produit ${id.nom} ?`
+              : "Aucun poste sélectionné."}
           </p>
         </div>
         <div className="boutton text-center mt-5">
-          <button className="btn" onClick={closeModal} disabled={isLoading}>
+          <button className="btn" onClick={onclose} disabled={isLoading}>
             Annuler
           </button>
           <button

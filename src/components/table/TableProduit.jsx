@@ -7,8 +7,8 @@ export default function TableProduit() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageGroup, setPageGroup] = useState(1);
   const itemsPerPage = 5;
-  const { setOpenModalDelete, setInfo, listEmploye } = useAdmin();
-  const { listProduit,setEdit,setOpen,ShowEdit } = useProduit();
+  const { setOpenModalDelete, setInfo, listEmploye,setId } = useAdmin();
+  const { listProduit,setEdit,setOpen,ShowEdit ,setOpenDelete} = useProduit();
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(listProduit.length / itemsPerPage);
@@ -117,8 +117,8 @@ export default function TableProduit() {
                 <button
                   className="text-gray-600 hover:text-red-700"
                   onClick={() => {
-                    setOpenModalDelete(true);
-                    setInfo(row);
+                    setOpenDelete(true);
+                    setId(row);
                   }}
                 >
                   <TrashIcon className="w-5 h-5" />

@@ -2,23 +2,41 @@ import React from "react";
 import { useReservation } from "../../../context/ReservationContext";
 import Modal from "../Modal";
 import { CheckCircle, TrashIcon } from "lucide-react";
+import { useAdmin } from "../../../context/AdminContext";
+import { Reservation } from "../../../service/Reservation";
 
 export default function ConfirmModal() {
+  const {info,toast} =  useAdmin()
   const { openD ,setOpenD} = useReservation();
+
+  const confirmationReservation= ()=>{
+
+    if (!info || !info.id) {
+      toast.error("Aucun ID valide n'est sélectionné. Veuillez réessayer.");
+      return;
+    }
+
+    Reservation.confirmationReservation(info.id).then((res)=>{
+      console.log(res.data);
+      setOpenD(false)
+    }).catch(error=>console.log(error))
+    
+  }
+
   return (
     <>
       <Modal open={openD} onClose={()=>setOpenD(false)}>
         <div className="flex justify-center items-center h-full">
           <div className="contenu text-center w-80">
             <CheckCircle className="text-green-500 w-16 h-16 mx-auto mb-4" />
-            <span className="font-bold text-2xl text-gray-700 ">
-              Êtes-vous sûr de vouloir confirmer cette réservation ?
+            <span className="font-bold text-lg text-gray-700 ">
+              Êtes-vous sûr de vouloir confirmer cette réservation  ?
             </span>
           </div>
         </div>
         <div className="float-end mt-2">
-            <button className="btn hover:bg-red-500 hover:text-white">Annuler</button>
-            <button className="btn bg-green-500 text-white ml-5">Confirmer</button>
+            <button className="btn hover:bg-red-500 hover:text-white" onClick={()=>setOpenD(false)}>Annuler</button>
+            <button className="btn bg-green-500 text-white ml-5" onClick={confirmationReservation}>Confirmer</button>
         </div>
       </Modal>
     </>

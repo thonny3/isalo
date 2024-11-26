@@ -10,8 +10,8 @@ export default function TableReservation() {
   const [pageGroup, setPageGroup] = useState(1);
   const itemsPerPage = 5;
 
-  const { setOpenModalDelete, setInfo, listEmploye } = useAdmin();
-  const { listRes, rooms, setOpenD,setOpenP } = useReservation();
+  const { setOpenModalDelete, setInfo,info, listEmploye } = useAdmin();
+  const { listRes, rooms, setOpenD,setOpenP,setOpen } = useReservation();
 
   // Filtrage des réservations par chambre
   const [filteredReservations, setFilteredReservations] = useState(listRes);
@@ -102,6 +102,7 @@ export default function TableReservation() {
   };
 
   const  openModalConfirm = (row)=>{
+    setInfo(row)
     setOpenD(true)
   }
 
@@ -145,13 +146,13 @@ export default function TableReservation() {
             {currentData.map((row, index) => (
               <tr key={index} className="text-gray-700 py-3 hover:bg-gray-200">
                 <td className="px-4 py-2 flex items-center">
-                  <span className="ml-2 font-semibold">{row.Chambre_id}</span>
+                  <span className="ml-2 font-semibold">{row.client.nom}</span>
                 </td>
-                <td className="px-4 py-2">{row.Client_id}</td>
+                <td className="px-4 py-2">{row.chambre.numero_chambre}</td>
                 <td className="px-4 py-2 text-gray-700">{row.date_arrive}</td>
                 <td className="px-4 py-2 text-gray-700">{row.date_depart}</td>
                 <td className="px-4 py-2 text-gray-700">
-                  {row.is_avance_paid === 1 ? (
+                  {row.is_avance_paid === 0 ? (
                     <span className="text-xs font-medium me-2 px-2.5 py-0.5 rounded-full bg-red-100 text-red-800">
                       En attente
                     </span>
@@ -162,7 +163,7 @@ export default function TableReservation() {
                   )}
                 </td>
                 <td className="px-4 py-2 flex space-x-2">
-                  {row.is_avance_paid === 1 ? (
+                  {row.is_avance_paid === 0 ? (
                     <button onClick={()=>openModalConfirm(row)} className="text-xs font-medium me-2 px-3 py-1 rounded-md bg-green-500 text-white w-20 hover:bg-green-800">
                       Confirmer
                     </button>

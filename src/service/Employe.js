@@ -14,4 +14,9 @@ let infotEmploye = (id) => {
 let deleteEmploye = (id)=>{
     return Axios.delete('users/'+id)
 }
-export const Employe = {getEmploye,createEmploye,infotEmploye,deleteEmploye}
+
+let updateEmploye =  (id,data)=>{
+    return Axios.put('users/' + id,data)
+}
+
+export const Employe = {getEmploye,createEmploye,infotEmploye,deleteEmploye,updateEmploye}

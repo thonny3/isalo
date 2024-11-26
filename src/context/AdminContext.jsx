@@ -5,9 +5,7 @@ import { Employe } from "../service/Employe";
 import { toast } from "react-toastify";
 import { Conge } from "../service/Conge";
 import { Fournisseur } from "../service/Fournisseur";
-import { Produit } from "../service/Produit";
-import ClipLoader from "react-spinners/ClipLoader"; // Import spinner component
-import { useNavigate } from "react-router-dom";
+
 import { Client } from "../service/Client";
 const AdminContext = createContext();
 export const AdminProvider = ({ children }) => {
@@ -20,7 +18,7 @@ export const AdminProvider = ({ children }) => {
   const [listEmploye, setListEmploye] = useState([]);
   const [typeConge, setTypeConge] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [listFournisseurs, setListFournisseur] = useState(null);
+  const [listFournisseurs, setListFournisseur] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true); // New loading state
   const [app,setApp] = useState("toils")

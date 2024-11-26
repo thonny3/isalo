@@ -2,17 +2,15 @@ import axios from "axios";
 import { serviceCount } from "./Service";
 
 const Axios = axios.create({
-   baseURL: 'https://isalo.shop/api'
+   baseURL: 'http://localhost:8000/api'
 });
 
-Axios.interceptors.request.use(request => {
-    // Set Authorization header
-    request.headers['Authorization'] = 'Bearer '+localStorage.getItem('token');
-  
-    // Return the full request object
+Axios.interceptors.request.use((request) => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      request.headers['Authorization'] = `Bearer ${token}`;
+    }
     return request;
-}, error => {
-    return Promise.reject(error); // Make sure to handle errors properly
-});
+  });
 
 export default Axios;

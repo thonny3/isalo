@@ -18,7 +18,7 @@ export default function DeletePoste() {
     }
 
     setIsLoading(true);
-
+    console.log(id);
     Poste.deletePoste(id.id)
       .then(() => {
         toast.success("Le poste a été supprimé !");
@@ -42,14 +42,16 @@ export default function DeletePoste() {
           <img src={logoDelete} alt="Delete logo" />
         </div>
         <div className="w-56">
+        
           <p className="text-center font-semibold text-lg text-gray-700">
             {id && id.nom
-              ? `Êtes-vous sûr de vouloir supprimer ce poste ${id.nom} ?`
+              ? `Êtes-vous sûr de vouloir supprimer ce poste ${id.nom} ${id.id}?`
               : "Aucun poste sélectionné."}
           </p>
         </div>
         <div className="boutton text-center mt-5">
           <button className="btn" onClick={closeModal} disabled={isLoading}>
+           
             Annuler
           </button>
           <button

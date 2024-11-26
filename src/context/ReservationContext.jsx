@@ -12,6 +12,7 @@ export const ReservationProvider = ({ children }) => {
   const [openD, setOpenD] = useState(false);
   const [openP, setOpenP] = useState(false);
   const [data,setData] =  useState(null)
+  const [info,setInfo] =  useState([])
 
   const getReservation = () => {
     Reservation.getAllReservation()
@@ -36,7 +37,7 @@ export const ReservationProvider = ({ children }) => {
 
   return (
     <ReservationContext.Provider
-      value={{ listRes, rooms,open , setOpen, getReservation, getAllChambres,setData,data,setOpenD,setOpenP,openP,openD  }}
+      value={{ listRes, rooms,open , setOpen, getReservation, getAllChambres,setData,data,setOpenD,setOpenP,openP,openD ,setInfo,info }}
     >
       {children}
     </ReservationContext.Provider>

@@ -6,13 +6,12 @@ const login = (data) => {
 
 
 const isLoggin = () => {
-    let token = JSON.stringify(localStorage.getItem('user'))
-    return !!token
-}
+    let token = JSON.stringify(sessionStorage.getItem('user'));
+    return !!token; // Retourne true si un token existe, sinon false
+};
 
 const getToken = () => {
-    
-    return  JSON.parse(localStorage.getItem('user'))
-}
+    return JSON.parse(sessionStorage.getItem('user')); // Récupère et parse l'objet user
+};
 
 export const serviceCount = {getToken,isLoggin,login}

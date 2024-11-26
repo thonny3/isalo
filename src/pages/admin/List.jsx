@@ -30,6 +30,7 @@ export default function List() {
   const [numero_cnaps, setNumero_cnaps] = useState("");
   const [numero_omsi, setNumero_omsi] = useState("");
   const [banque, setBanque] = useState("");
+  const [sexe, setSexe] = useState("");
   const [num_compte_bancaire, setNum_compte_bancaire] = useState("");
   const [salaires_brut, setSalaires_brut] = useState(null);
   const [image, setImage] = useState(null);
@@ -45,12 +46,14 @@ export default function List() {
     listEmploye,
     info,
     toast,
+    getPostes
   } = useAdmin();
 
   const onClose = () => {
     setOpen(false);
     setOpenDelete(false);
     setEdit(null)
+    resetForm()
   };
 
   const showModalDelete = (data) => {
@@ -74,7 +77,8 @@ export default function List() {
       numero_omsi:"",
       banque:"",
       num_compte_bancaire:"",
-      salaires_brut:null
+      salaires_brut:null,
+      sexe:""
     };
     let isValid = true;
 
@@ -167,6 +171,11 @@ export default function List() {
           formErrors.salaires_brut = "Veuillez remplir le champ  ";
           isValid = false;
         }
+        // Vérifier   si  sexe  vide
+    if (sexe == "") {
+      formErrors.sexe = "Veuillez remplir le champ  ";
+      isValid = false;
+    }
     
 
 
@@ -196,15 +205,27 @@ export default function List() {
       formData.append("banque", banque);
       formData.append("num_compte_bancaire", num_compte_bancaire);
       formData.append("salaires_brut", salaires_brut);
-      formData.append("photo", image);
+      formData.append("sexe", sexe);
       formData.append("files", files);
       formData.append("poste_id", poste_id);
+
+     if (edit) {
+      console.log(formData);
+      Employe.updateEmploye(edit,formData)
+      .then((res) => {
+        getAllEmploye();
+        onClose();
+      })
+      .catch((error) => console.log(error));
+     } else {
       Employe.createEmploye(formData)
-        .then((res) => {
-          getAllEmploye();
-          onClose();
-        })
-        .catch((error) => console.log(error));
+      .then((res) => {
+        toast.success("L'employée a été ajouté avec succès !");
+        getAllEmploye();
+        onClose();
+      })
+      .catch((error) => console.log(error));
+     }
     }
   };
 
@@ -238,13 +259,34 @@ export default function List() {
     setBanque(data.banque || "");
     setNum_compte_bancaire(data.num_compte_bancaire || "");
     setSalaires_brut(data.salaires_brut || null);
-    setImage(data.image || null);
+    setSexe(data.sexe || "");
     setFiles(data.files || null);
   };
 
+  const resetForm  = ()=>{
+    setmatricule("");
+    setNom("");
+    setPrenom("");
+    setDate_naiss("");
+    setNum_cin("");
+    setPoste_id(null);
+    setEmail("");
+    setContact("");
+    setSituation_mat("");
+    setNombre_enf(0);
+    setDate_embauche("");
+    setNumero_cnaps("");
+    setNumero_omsi("");
+    setBanque("");
+    setNum_compte_bancaire("");
+    setSalaires_brut(null);
+    setSexe("");
+    setFiles(null);
+  }
   
   useEffect(()=>{
     getAllEmploye()
+    getPostes()
   },[])
 
   return (
@@ -266,7 +308,7 @@ export default function List() {
             type="text"
             placeholder="Rechercher"
             className="pl-2 outline-none flex-grow text-secondary text-md placeholder:text-secondary placeholder:text-sm placeholder:font-semibold"
-            value={searchQuery}
+           
             onChange={(e) => {
               setSearchQuery(e.target.value);
             }}
@@ -306,6 +348,7 @@ export default function List() {
                         errors.matricule && "border-red-600"
                       }`}
                       placeholder="Entrez le Matricule "
+                      value={matricule}
                       onChange={(e) => setmatricule(e.target.value)}
                     />
                   </div>
@@ -319,6 +362,7 @@ export default function List() {
                         errors.nom && "border-red-600"
                       }`}
                       placeholder="Entrez le Nom"
+                      value={nom}
                       onChange={(e) => setNom(e.target.value)}
                     />
                   </div>
@@ -333,6 +377,7 @@ export default function List() {
                         errors.prenom && "border-red-600"
                       }`}
                       placeholder="Entrez le Prénom"
+                      value={prenom}
                       onChange={(e) => setPrenom(e.target.value)}
                     />
                   </div>
@@ -346,7 +391,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.date_naiss && "border-red-600"
                       }`}
-                      placeholder="Entrez le Nom"
+                      value={date_naiss}
                       onChange={(e) => setDate_naiss(e.target.value)}
                     />
                   </div>
@@ -361,6 +406,7 @@ export default function List() {
                         errors.num_cin && "border-red-600"
                       }`}
                       placeholder="Entrez le CIN"
+                      value={num_cin}
                       onChange={(e) => setNum_cin(e.target.value)}
                     />
                   </div>
@@ -375,6 +421,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.poste_id && "border-red-600"
                       }`}
+                      value={poste_id}
                       onChange={(e) => setPoste_id(e.target.value)}
                     >
                       <option value="" >
@@ -397,6 +444,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.email && "border-red-600"
                       }`}
+                      value={email}
                       placeholder="Entrez Email"
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -411,6 +459,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.contact && "border-red-600"
                       }`}
+                      value={contact}
                       placeholder="Entrez le Contact"
                       onChange={(e) => setContact(e.target.value)}
                     />
@@ -426,6 +475,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.situation_mat && "border-red-600"
                       }`}
+                      value={situation_mat}
                       onChange={(e) => setSituation_mat(e.target.value)}
                     >
                       <option value="">Selectionnez</option>
@@ -439,9 +489,9 @@ export default function List() {
                     </label>
                     <input
                       type="number"
-                      value={nombre_enf}
                       className="form-control w-full h-10"
                       placeholder="Entrez le nombre d'enfant"
+                      value={nombre_enf}
                       onChange={(e) => setNombre_enf(e.target.value)}
                     />
                   </div>
@@ -455,6 +505,7 @@ export default function List() {
                       className={`form-control w-full h-10 ${
                         errors.date_embauche && "border-red-600"
                       }`}
+                      value={date_embauche}
                       placeholder="Entrez le Nom"
                       onChange={(e) => setDate_embauche(e.target.value)}
                     />
@@ -470,6 +521,7 @@ export default function List() {
                         errors.files && "border-red-600"
                       }`}
                       placeholder="Entrez le Nom"
+                   
                       onChange={(e) => {
                         setFiles(e.target.files[0]);
                       }}
@@ -488,6 +540,7 @@ export default function List() {
                         errors.numero_cnaps && "border-red-600"
                       }`}
                       placeholder="Entrez le Numéro  CNAPS"
+                      value={numero_cnaps}
                       onChange={(e) => setNumero_cnaps(e.target.value)}
                     />
                   </div>
@@ -502,6 +555,7 @@ export default function List() {
                         errors.numero_omsi && "border-red-600"
                       }`}
                       placeholder="Entrez le Numéro Omsi"
+                      value={numero_omsi}
                       onChange={(e) => setNumero_omsi(e.target.value)}
                     />
                   </div>
@@ -517,6 +571,7 @@ export default function List() {
                           errors.banque && "border-red-600"
                         }`}
                         placeholder="Entrez le Banque"
+                        value={banque}
                         onChange={(e) => setBanque(e.target.value)}
                       />
                     </div>
@@ -532,6 +587,7 @@ export default function List() {
                         errors.num_compte_bancaire && "border-red-600"
                       }`}
                       placeholder="Entrez le numéro du compte"
+                      value={num_compte_bancaire}
                       onChange={(e) => setNum_compte_bancaire(e.target.value)}
                     />
                   </div>
@@ -546,12 +602,13 @@ export default function List() {
                         errors.salaires_brut && "border-red-600"
                       }`}
                       placeholder="Entrez le salaire"
+                      value={salaires_brut}
                       onChange={(e) => setSalaires_brut(e.target.value)}
                     />
                   </div>
                   <div className="form-group mt-2">
                     <label htmlFor="">Sexe <span className="text-red-500">*</span></label><br />
-                    <select name="" id="" className="w-[80%] h-10 form-control">
+                    <select name="" id="" className="w-[80%] h-10 form-control" value={sexe} onChange={(e)=>setSexe(e.target.value)}>
                       <option value="">Selectionner le sexe</option>
                       <option value="F">Femme</option>
                       <option value="M">Homme</option>
@@ -561,7 +618,7 @@ export default function List() {
               </div>
             </div>
             <div className="boutton flex justify-end mt-5">
-              <button className="btn" onClick={onClose}>Annuler</button>
+              <button className="btn" type="button" onClick={onClose}>Annuler</button>
               <button className="btn-primary px-5 ml-5" type="submit">
                 {
                   edit ? "Modifier" : "Ajouter"
